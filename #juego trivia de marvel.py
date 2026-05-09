@@ -3,15 +3,21 @@ import streamlit as st
 # Configuración de estilo
 st.set_page_config(page_title="Quiz de Marvel", page_icon="🛡️")
 
-# --- MÚSICA DE FONDO EN BUCLE ---
-try:
-    audio_file = open('vengadores.mp3', 'rb')
-    audio_bytes = audio_file.read()
-    # Agregamos loop=True para que no pare nunca
-    st.audio(audio_bytes, format='audio/mp3', loop=True)
-except FileNotFoundError:
-    st.info("💡 Tip: Para que suene la música en bucle, subí 'vengadores.mp3' a la carpeta del proyecto.")
+# --- MÚSICA DE FONDO ---
+# Usamos una función para cargar el audio y que no falle en el servidor
+def cargar_audio():
+    try:
+        with open("vengadores.mp3", "rb") as f:
+            return f.read()
+    except FileNotFoundError:
+        return None
 
+audio_data = cargar_audio()
+
+if audio_data:
+    st.audio(audio_data, format="audio/mp3", loop=True, autoplay=True)
+else:
+    st.warning("⚠️ No se pudo cargar 'vengadores.mp3'. Verificá que el archivo esté en la raíz de tu GitHub.")
 st.title("🛡️ Quiz de Marvel")
 st.write("---")
 
